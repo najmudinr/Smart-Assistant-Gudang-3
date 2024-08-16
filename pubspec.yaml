@@ -1,0 +1,43 @@
+name: smartassistant
+description: "Smart Assistant Warehouse Area 3"
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^0.68.0
+
+  english_words: ^4.0.0
+  provider: ^6.0.0
+
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.2.1
+  persistent_bottom_nav_bar: ^6.2.1
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+      - assets/logopg.png
+      - assets/logogd.png
+      - assets/loginbg.jpg
+      - assets/bgdb.jpeg
+  fonts:
+      - family: Poppins
+        fonts:
+          - asset: assets/fonts/Poppins-Bold.ttf
+          - asset: assets/fonts/Poppins-Medium.ttf
