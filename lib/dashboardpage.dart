@@ -5,68 +5,6 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold( // Tetap gunakan Scaffold jika ada AppBar dan Drawer
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Dashboard', style: TextStyle(color: Colors.black)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {},
-          ),
-          SizedBox(width: 16),
-          CircleAvatar(
-            backgroundColor: Colors.grey[800],
-            child: Icon(Icons.person, color: Colors.white),
-          ),
-          SizedBox(width: 16),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
-                    child: Icon(Icons.person, size: 40, color: Colors.grey),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Nama Pengguna',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    'Jabatan/Role',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              
-              leading: Icon(Icons.dashboard),
-              title: Text('Dashboard'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            // Tambahkan ListTile lainnya untuk menu drawer
-          ],
-        ),
-      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
@@ -78,7 +16,8 @@ class DashboardPage extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.02),
                 AgendaCard(screenWidth: screenWidth),
                 PetugasCard(screenWidth: screenWidth),
-                ChartCard(screenWidth: screenWidth)
+                GudangInternalCard(screenWidth: screenWidth),
+                GudangExternalCard(screenWidth: screenWidth)
               ],
             ),
           );
@@ -212,10 +151,10 @@ class PetugasCard extends StatelessWidget {
 }
 
 
-class ChartCard extends StatelessWidget {
+class GudangInternalCard extends StatelessWidget {
   final double screenWidth;
 
-  ChartCard({required this.screenWidth});
+  GudangInternalCard({required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -326,6 +265,111 @@ class ChartCard extends StatelessWidget {
         BarChartRodData(toY: 78460, color: Colors.blue),
         BarChartRodData(toY: 56593, color: Colors.red),
         BarChartRodData(toY: 21866, color: Colors.yellow),
+      ], showingTooltipIndicators: [0, 1, 2]),
+    ];
+  }
+}
+
+class GudangExternalCard extends StatelessWidget {
+  final double screenWidth;
+
+  GudangExternalCard({required this.screenWidth});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      margin: EdgeInsets.all(screenWidth * 0.02),
+      child: Padding(
+        padding: EdgeInsets.all(screenWidth * 0.04),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Utilisasi Kapasitas Gudang External Area 3',
+              style: TextStyle(
+                color: Colors.cyan,
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: screenWidth * 0.02),
+            SizedBox(
+              height: screenWidth * 0.8,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: 80000,
+                  barTouchData: BarTouchData(enabled: false),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (double value, TitleMeta meta) {
+                          const style = TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          );
+                          switch (value.toInt()) {
+                            case 0:
+                              return Text('KIG Beton', style: style);
+                            case 1:
+                              return Text('KIG FB', style: style);
+                            case 2:
+                              return Text('KIG Q', style: style);
+                            default:
+                              return Text('', style: style);
+                          }
+                        },
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (double value, TitleMeta meta) {
+                          return Text('${value.toInt()}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ));
+                        },
+                        interval: 10000,
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  barGroups: _createBarGroups(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<BarChartGroupData> _createBarGroups() {
+    return [
+      BarChartGroupData(x: 0, barRods: [
+        BarChartRodData(toY: 21000, color: Colors.blue),
+        BarChartRodData(toY: 10000, color: Colors.red),
+        BarChartRodData(toY: 11000, color: Colors.yellow),
+      ], showingTooltipIndicators: [0, 1, 2]),
+      BarChartGroupData(x: 1, barRods: [
+        BarChartRodData(toY: 10000, color: Colors.blue),
+        BarChartRodData(toY: 7800, color: Colors.red),
+        BarChartRodData(toY: 2200, color: Colors.yellow),
+      ], showingTooltipIndicators: [0, 1, 2]),
+      BarChartGroupData(x: 2, barRods: [
+        BarChartRodData(toY: 70000, color: Colors.blue),
+        BarChartRodData(toY: 40000, color: Colors.red),
+        BarChartRodData(toY: 30000, color: Colors.yellow),
       ], showingTooltipIndicators: [0, 1, 2]),
     ];
   }
