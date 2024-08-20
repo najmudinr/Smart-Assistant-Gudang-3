@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartassistant/absensipage.dart';
 import 'package:smartassistant/dashboardpage.dart';
 import 'package:smartassistant/konsultasipage.dart';
 
@@ -23,10 +24,10 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     DashboardPage(),
-    PlaceholderWidget(color: Colors.green), // Placeholder untuk Absensi
+    AbsensiPage(), // Placeholder untuk Absensi
     PlaceholderWidget(color: Colors.blue), // Placeholder untuk News & Event
     PlaceholderWidget(color: Colors.red), // Placeholder untuk Produk
-    PlaceholderWidget(color: Colors.orange) // Placeholder untuk Report
+    PlaceholderWidget(color: Colors.orange), // Placeholder untuk Report
   ];
 
   void _onItemTapped(int index) {
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   void _navigateToPage(Widget page) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ScaffoldWithNavbar(page: page)),
+      MaterialPageRoute(builder: (context) => page),
     );
   }
 
@@ -49,13 +50,13 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications, color: Colors.black),
             onPressed: () {
               // Tambahkan fungsi untuk notifikasi di sini
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: Colors.black),
             onPressed: () {
               // Tambahkan fungsi untuk avatar di sini (misalnya menuju halaman profil)
             },
@@ -93,7 +94,13 @@ class _HomePageState extends State<HomePage> {
               title: Text('Konsultasi'),
               onTap: () {
                 Navigator.pop(context);
-                _navigateToPage(ConsultationPage());
+                _navigateToPage(Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.white,
+                    title: Text('Konsultasi'),
+                  ),
+                  body: ConsultationPage(),
+                ));
               },
             ),
             // Tambahkan item drawer lainnya di sini
@@ -126,57 +133,10 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
-        unselectedItemColor:
-            Colors.white60, // Menetapkan warna ikon yang tidak dipilih
-        backgroundColor: Color.fromRGBO(
-            75, 185, 236, 100), // Pastikan backgroundColor diatur di sini
-        type: BottomNavigationBarType
-            .fixed, // Agar warna background tidak berubah saat ada lebih dari 3 item
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-
-class ScaffoldWithNavbar extends StatelessWidget {
-  final Widget page;
-
-  ScaffoldWithNavbar({required this.page});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: page,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.access_time),
-            label: 'Absensi',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'News & Event',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.production_quantity_limits),
-            label: 'Produk',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.report),
-            label: 'Report',
-          ),
-        ], // Set sesuai tab yang relevan
-        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white60,
         backgroundColor: Color.fromRGBO(75, 185, 236, 100),
         type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          Navigator.pop(context); // Tutup halaman saat item dipilih
-        },
+        onTap: _onItemTapped,
       ),
     );
   }

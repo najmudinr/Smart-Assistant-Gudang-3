@@ -1,7 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:smartassistant/firebase_options.dart';
 import 'package:smartassistant/loginpage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+  );  // Inisialisasi Firebase
   runApp(MyApp());
 }
 
@@ -11,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Monitoring Gudang & Pengantongan',
+      title: 'Smart Assistant',
       theme: ThemeData(
         fontFamily: 'Poppins',
         scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),
