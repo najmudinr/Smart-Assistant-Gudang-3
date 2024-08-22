@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartassistant/absensipage.dart';
 import 'package:smartassistant/dashboardpage.dart';
 import 'package:smartassistant/konsultasipage.dart';
+import 'package:smartassistant/loginpage.dart'; // Tambahkan import untuk halaman login
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-    );
-  }
-}
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     DashboardPage(),
-    AbsensiPage(), // Placeholder untuk Absensi
+    AbsensiPage(),
     PlaceholderWidget(color: Colors.blue), // Placeholder untuk News & Event
     PlaceholderWidget(color: Colors.red), // Placeholder untuk Produk
     PlaceholderWidget(color: Colors.orange), // Placeholder untuk Report
@@ -41,6 +33,19 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (context) => page),
     );
+  }
+
+  Future<void> _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+      // Anda bisa menambahkan handling error di sini (misalnya menampilkan snackbar)
+    }
   }
 
   @override
@@ -104,6 +109,16 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             // Tambahkan item drawer lainnya di sini
+
+            // Tambahkan item untuk Logout
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                Navigator.pop(context);
+                _logout(); // Panggil fungsi logout
+              },
+            ),
           ],
         ),
       ),

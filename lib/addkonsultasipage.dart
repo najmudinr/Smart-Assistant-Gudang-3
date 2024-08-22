@@ -17,12 +17,33 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
   String _priority = 'Rendah';
   String? _selectedAtasan;
   String? _uploadedFileUrl;
+  String? _userRole; // Role user yang sedang login
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole(); // Mendapatkan role user saat inisialisasi
+  }
+
+  Future<void> _getUserRole() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        _userRole = userDoc['role']; // Menyimpan role user
+      });
+    }
+  }
 
   // Method untuk mengambil data atasan dari Firestore
-  Future<List<QueryDocumentSnapshot>> _fetchAtasan() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('atasan').get();
-    return snapshot.docs;
-  }
+Future<List<QueryDocumentSnapshot>> _fetchAtasan() async {
+  // Mengambil data dari koleksi 'users' dengan role 'atasan'
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('role', isEqualTo: 'atasan')
+      .get();
+  return snapshot.docs;
+}
 
   Future<void> _pickFile() async {
     // Menggunakan file_picker untuk memilih file
@@ -60,13 +81,13 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
         User? user = FirebaseAuth.instance.currentUser;
 
         // Menyimpan data konsultasi ke Firestore
-        await FirebaseFirestore.instance.collection('consultations').add({
+        DocumentReference consultationRef = await FirebaseFirestore.instance.collection('consultations').add({
           'userId': user?.uid,
           'topic': _topicController.text,
           'description': _descriptionController.text,
           'priority': _priority,
           'atasan': _selectedAtasan,
-          'fileUrl': _uploadedFileUrl, // Menyimpan URL file ke Firestore
+          'fileUrl': _uploadedFileUrl,
           'timestamp': FieldValue.serverTimestamp(),
           'status': 'Aktif',
         });
@@ -74,8 +95,10 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
         // Mengirim notifikasi ke atasan
         await FirebaseFirestore.instance.collection('notifications').add({
           'receiverId': _selectedAtasan,
-          'message': 'Anda menerima konsultasi baru',
+          'consultationId': consultationRef.id,
+          'message': 'Anda menerima konsultasi baru dari ${user?.email}',
           'timestamp': FieldValue.serverTimestamp(),
+          'isRead': false,
         });
 
         // Menampilkan alert jika berhasil
@@ -197,7 +220,7 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
                       items: snapshot.data!
                           .map((atasan) => DropdownMenuItem(
                                 value: atasan.id,
-                                child: Text(atasan['nama']),
+                                child: Text(atasan['name']),
                               ))
                           .toList(),
                       onChanged: (value) {
@@ -254,7 +277,7 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
-                      child: Text('Ajukan'),
+                      child: Text('Ajukan Konsultasi'),
                     ),
                   ],
                 ),

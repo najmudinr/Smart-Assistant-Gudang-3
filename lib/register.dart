@@ -1,41 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smartassistant/homepage.dart';
-import 'package:smartassistant/register.dart';
+import 'package:smartassistant/loginpage.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  final TextEditingController nameController = TextEditingController();
+  
+  // Menyimpan nilai role yang dipilih
+  String _selectedRole = 'user'; // Default role
+  
   bool _isLoading = false;
   String? _errorMessage;
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: usernameController.text.trim(),
+      // Register user with Firebase Authentication
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // Langsung arahkan ke HomePage setelah login berhasil
+      // Save additional user data to Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'email': emailController.text.trim(),
+        'name': nameController.text.trim(),
+        'role': _selectedRole,  // Menyimpan role yang dipilih ke Firestore
+      });
+
+      // Navigate to HomePage or LoginPage after registration
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     } catch (e) {
       setState(() {
-        _errorMessage = 'Login failed: ${e.toString()}';
+        _errorMessage = 'Registration failed: ${e.toString()}';
       });
     } finally {
       setState(() {
@@ -64,10 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Image.asset('assets/logopg.png',
-                          height: screenHeight * 0.05),
-                      Image.asset('assets/logogd.png',
-                          height: screenHeight * 0.05),
+                      Image.asset('assets/logopg.png', height: screenHeight * 0.05),
+                      Image.asset('assets/logogd.png', height: screenHeight * 0.05),
                     ],
                   ),
                   SizedBox(height: screenHeight * 0.05),
@@ -83,21 +93,27 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: screenHeight * 0.05),
 
-                  // Background Image
-                  Image.asset(
-                    'assets/bgdb.jpeg',
-                    width: screenWidth * 0.5,
-                    height: screenHeight * 0.25,
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-
                   // Form
                   SizedBox(
                     width: screenWidth * 0.8,
                     child: TextField(
-                      controller: usernameController,
+                      controller: nameController,
                       decoration: InputDecoration(
-                        labelText: 'Nama Pengguna',
+                        labelText: 'Nama',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                        border: UnderlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+
+                  SizedBox(
+                    width: screenWidth * 0.8,
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.8),
                         border: UnderlineInputBorder(),
@@ -121,6 +137,33 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: screenHeight * 0.02),
 
+                  // Dropdown for Role Selection
+                  SizedBox(
+                    width: screenWidth * 0.8,
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: 'Pilih Role',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                        border: UnderlineInputBorder(),
+                      ),
+                      value: _selectedRole,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedRole = newValue!;
+                        });
+                      },
+                      items: <String>['user', 'admin', 'atasan']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+
                   // Error message
                   if (_errorMessage != null)
                     Padding(
@@ -131,12 +174,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                  // Login Button
+                  // Register Button
                   SizedBox(
                     width: screenWidth * 0.8,
                     height: screenHeight * 0.07,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
+                      onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromRGBO(75, 185, 236, 100),
                         padding: EdgeInsets.symmetric(
@@ -147,23 +190,23 @@ class _LoginPageState extends State<LoginPage> {
                       child: _isLoading
                           ? CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              'Login',
+                              'Register',
                               style: TextStyle(color: Colors.white),
                             ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: screenHeight * 0.02),
 
+                  // Link to Login
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
-                    child: Text('Don\'t have an account? Register here'),
+                    child: Text('Already have an account? Login here'),
                   ),
-                  SizedBox(height: screenHeight * 0.05),
 
                   // Footer
                   Text(

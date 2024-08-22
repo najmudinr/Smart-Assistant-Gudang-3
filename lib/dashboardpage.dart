@@ -1,10 +1,59 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fl_chart/fl_chart.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  String? userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+    _fetchUserNameFromFirestore();  // Tambahkan ini untuk memanggil Firestore
+  }
+
+  Future<void> _loadUserName() async {
+    // Ambil nama dari SharedPreferences jika tersedia
+    final prefs = await SharedPreferences.getInstance();
+    String? cachedName = prefs.getString('userName');
+
+    setState(() {
+      userName = cachedName;
+    });
+  }
+
+  Future<void> _fetchUserNameFromFirestore() async {
+    try {
+      print("Fetching user name...");
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        if (userDoc.exists) {
+          setState(() {
+            userName = userDoc['name'];
+          });
+
+          // Simpan nama di SharedPreferences
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('userName', userName!);
+        }
+      }
+    } catch (e, stackTrace) {
+      print("Failed to fetch user name: $e");
+      print(stackTrace);  // Print the stack trace to help with debugging
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold( // Tetap gunakan Scaffold jika ada AppBar dan Drawer
+    return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
@@ -12,12 +61,28 @@ class DashboardPage extends StatelessWidget {
 
           return SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: screenHeight * 0.02),
+
+                // Tampilkan teks "Selamat datang, $name"
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  child: Text(
+                    'Selamat datang, ${userName ?? 'Pengguna'}', // Penanganan jika userName null
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: screenWidth * 0.05,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
                 SizedBox(height: screenHeight * 0.02),
                 AgendaCard(screenWidth: screenWidth),
                 PetugasCard(screenWidth: screenWidth),
                 GudangInternalCard(screenWidth: screenWidth),
-                GudangExternalCard(screenWidth: screenWidth)
+                GudangExternalCard(screenWidth: screenWidth),
               ],
             ),
           );
@@ -25,9 +90,7 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
-}
-
-// AgendaCard dan PetugasCard tidak berubah
+}// AgendaCard dan PetugasCard tidak berubah
 
 class AgendaCard extends StatelessWidget {
   final double screenWidth;
