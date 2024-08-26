@@ -3,6 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:smartassistant/comdev.dart';
+import 'package:smartassistant/disposisi.dart';
+import 'package:smartassistant/konsultasipage.dart';
+import 'package:smartassistant/laporan.dart';
+import 'package:smartassistant/pengajuan.dart';
+import 'package:smartassistant/penugasan.dart';
+import 'package:smartassistant/projectmanagement.dart';
+import 'package:smartassistant/teamwork.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -69,7 +77,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                   child: Text(
-                    'Selamat datang, ${userName ?? 'Pengguna'}', // Penanganan jika userName null
+                    'Selamat datang, ${userName ?? 'Pengguna'}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: screenWidth * 0.05,
@@ -79,6 +87,32 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
 
                 SizedBox(height: screenHeight * 0.02),
+
+                // Widget Dashboard Ikon Navigasi
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      _buildDashboardItem(context, 'Penugasan', 'assets/penugasan.png', PenugasanPage()),
+                      _buildDashboardItem(context, 'Comdev', 'assets/comdev.png', ComdevPage()),
+                      _buildDashboardItem(context, 'Disposisi', 'assets/disposisi.png', DisposisiPage()),
+                      _buildDashboardItem(context, 'Pengajuan', 'assets/pengajuan.png', PengajuanPage()),
+                      _buildDashboardItem(context, 'Laporan', 'assets/laporan.png', LaporanPage()),
+                      _buildDashboardItem(context, 'Teamwork Management', 'assets/teamwork.png', TeamworkManagementPage()),
+                      _buildDashboardItem(context, 'Project Management', 'assets/project.png', ProjectManagementPage()),
+                      _buildDashboardItem(context, 'Konsultasi', 'assets/konsultasi.png', ConsultationPage()),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: screenHeight * 0.02),
+
+                // Widgets yang sudah ada
                 AgendaCard(screenWidth: screenWidth),
                 PetugasCard(screenWidth: screenWidth),
                 GudangInternalCard(screenWidth: screenWidth),
@@ -90,8 +124,31 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
-}// AgendaCard dan PetugasCard tidak berubah
 
+  // Widget untuk membangun item dashboard
+  Widget _buildDashboardItem(BuildContext context, String title, String imagePath, Widget targetPage) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => targetPage),
+        );
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(imagePath, height: 50, width: 50),
+          SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
 class AgendaCard extends StatelessWidget {
   final double screenWidth;
 

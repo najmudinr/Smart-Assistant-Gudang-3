@@ -43,6 +43,14 @@ flutter:
       - assets/logogd.png
       - assets/loginbg.jpg
       - assets/bgdb.jpeg
+      - assets/penugasan.png
+      - assets/comdev.png
+      - assets/disposisi.png
+      - assets/pengajuan.png
+      - assets/laporan.png
+      - assets/teamwork.png
+      - assets/project.png
+      - assets/konsultasi.png
   fonts:
       - family: Poppins
         fonts:

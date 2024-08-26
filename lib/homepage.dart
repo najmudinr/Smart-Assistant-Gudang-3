@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smartassistant/absensipage.dart';
 import 'package:smartassistant/dashboardpage.dart';
 import 'package:smartassistant/konsultasipage.dart';
-import 'package:smartassistant/loginpage.dart'; // Tambahkan import untuk halaman login
+import 'package:smartassistant/loginpage.dart';
+import 'package:smartassistant/newsevenpage.dart'; // Tambahkan import untuk halaman login
 
 
 class HomePage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     DashboardPage(),
     AbsensiPage(),
-    PlaceholderWidget(color: Colors.blue), // Placeholder untuk News & Event
+    NewsEventPage(), // Placeholder untuk News & Event
     PlaceholderWidget(color: Colors.red), // Placeholder untuk Produk
     PlaceholderWidget(color: Colors.orange), // Placeholder untuk Report
   ];
