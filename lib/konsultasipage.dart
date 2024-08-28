@@ -13,6 +13,10 @@ class ConsultationPage extends StatelessWidget {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("Konsultasi"),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: screenWidth * 0.04,

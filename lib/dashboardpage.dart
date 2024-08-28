@@ -92,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                   child: GridView.count(
-                    crossAxisCount: 3,
+                    crossAxisCount: 4,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     shrinkWrap: true,
@@ -137,7 +137,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(imagePath, height: 50, width: 50),
+          Image.asset(imagePath, height: 30, width: 30),
           SizedBox(height: 8),
           Text(
             title,

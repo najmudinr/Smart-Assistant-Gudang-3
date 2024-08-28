@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:smartassistant/absensipage.dart';
 import 'package:smartassistant/dashboardpage.dart';
-import 'package:smartassistant/konsultasipage.dart';
 import 'package:smartassistant/loginpage.dart';
-import 'package:smartassistant/newsevenpage.dart'; // Tambahkan import untuk halaman login
-
+import 'package:smartassistant/newsevenpage.dart';
+import 'package:smartassistant/productpage.dart';
+import 'package:smartassistant/reportpage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,11 +16,11 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    DashboardPage(),
-    AbsensiPage(),
-    NewsEventPage(), // Placeholder untuk News & Event
-    PlaceholderWidget(color: Colors.red), // Placeholder untuk Produk
-    PlaceholderWidget(color: Colors.orange), // Placeholder untuk Report
+    _buildPage(DashboardPage(), 'Dashboard'),
+    _buildPage(AbsensiPage(), 'Absensi'),
+    _buildPage(NewsEventPage(), 'News & Event'),
+    _buildPage(ProductPage(), 'Produk'),
+    _buildPage(ReportPage(), 'Report'),
   ];
 
   void _onItemTapped(int index) {
@@ -29,10 +29,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _navigateToPage(Widget page) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
+  static Widget _buildPage(Widget page, String title) {
+    return Scaffold(
+      body: page,
     );
   }
 
@@ -45,7 +44,6 @@ class _HomePageState extends State<HomePage> {
       );
     } catch (e) {
       print('Error logging out: $e');
-      // Anda bisa menambahkan handling error di sini (misalnya menampilkan snackbar)
     }
   }
 
@@ -57,71 +55,13 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {
-              // Tambahkan fungsi untuk notifikasi di sini
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Icon(Icons.person, color: Colors.black),
-            onPressed: () {
-              // Tambahkan fungsi untuk avatar di sini (misalnya menuju halaman profil)
-            },
+            onPressed: () {},
           ),
         ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Dashboard'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _selectedIndex = 0;
-                });
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book),
-              title: Text('Konsultasi'),
-              onTap: () {
-                Navigator.pop(context);
-                _navigateToPage(Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: Colors.white,
-                    title: Text('Konsultasi'),
-                  ),
-                  body: ConsultationPage(),
-                ));
-              },
-            ),
-            // Tambahkan item drawer lainnya di sini
-
-            // Tambahkan item untuk Logout
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
-              onTap: () {
-                Navigator.pop(context);
-                _logout(); // Panggil fungsi logout
-              },
-            ),
-          ],
-        ),
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -154,19 +94,6 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),
-    );
-  }
-}
-
-class PlaceholderWidget extends StatelessWidget {
-  final Color color;
-
-  PlaceholderWidget({required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: color,
     );
   }
 }
