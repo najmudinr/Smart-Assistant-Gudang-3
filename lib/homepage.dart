@@ -57,9 +57,19 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.notifications, color: Colors.black),
             onPressed: () {},
           ),
-          IconButton(
+          PopupMenuButton<String>(
             icon: Icon(Icons.person, color: Colors.black),
-            onPressed: () {},
+            onSelected: (String result) {
+              if (result == 'Logout') {
+                _logout();
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('Logout'),
+              ),
+            ],
           ),
         ],
       ),

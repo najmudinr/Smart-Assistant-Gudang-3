@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-import 'package:smartassistant/homepage.dart';
+/* import 'package:flutter/foundation.dart';
+import 'package:smartassistant/homepage.dart'; */
 import 'package:flutter/material.dart';
 import 'package:smartassistant/firebase_options.dart';
 import 'package:smartassistant/loginpage.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Color.fromRGBO(239, 175, 12, 100))
       ),
-      home:  kDebugMode ? HomePage() :  LoginPage(),
+      home:/*   kDebugMode ? HomePage() :   */LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
