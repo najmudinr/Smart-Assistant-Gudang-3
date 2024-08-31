@@ -19,25 +19,24 @@ class ProjectManagementDetailPage extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Table(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Table(
                   border: TableBorder.all(color: Colors.grey),
                   columnWidths: {
-                    0: FlexColumnWidth(40.0),
-                    1: FlexColumnWidth(2),
-                    2: FlexColumnWidth(1.5),
-                    3: FlexColumnWidth(1),
-                    4: FlexColumnWidth(2),
-                    5: FlexColumnWidth(2),
-                    6: FlexColumnWidth(1.5),
-                    7: FlexColumnWidth(1.5),
-                    8: FlexColumnWidth(1),
+                    0: IntrinsicColumnWidth(), // Menggunakan ukuran sesuai konten
+                    1: IntrinsicColumnWidth(),
+                    2: IntrinsicColumnWidth(),
+                    3: IntrinsicColumnWidth(),
+                    4: IntrinsicColumnWidth(),
+                    5: IntrinsicColumnWidth(),
+                    6: IntrinsicColumnWidth(),
+                    7: IntrinsicColumnWidth(),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: [
@@ -69,24 +68,8 @@ class ProjectManagementDetailPage extends StatelessWidget {
                     _buildTableRow('9', 'Go Live'),
                   ],
                 ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.add),
-                    label: Text('Tambah Teamwork'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -118,8 +101,8 @@ class ProjectManagementDetailPage extends StatelessWidget {
           fontSize: isHeader ? 14.0 : 12.0,
         ),
         textAlign: TextAlign.center,
+        overflow: TextOverflow.visible,
       ),
     );
   }
 }
-
