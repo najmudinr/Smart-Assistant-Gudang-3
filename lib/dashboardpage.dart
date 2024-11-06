@@ -3,14 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:smartassistant/comdev.dart';
-import 'package:smartassistant/disposisi.dart';
-import 'package:smartassistant/konsultasipage.dart';
-import 'package:smartassistant/laporan.dart';
+import 'package:smartassistant/asktoexpert.dart';
 import 'package:smartassistant/pengajuan.dart';
+import 'package:smartassistant/konsultasipage.dart';
+import 'package:smartassistant/diskusirapat.dart';
 import 'package:smartassistant/penugasan.dart';
 import 'package:smartassistant/projectmanagement.dart';
-import 'package:smartassistant/teamwork.dart';
+import 'package:smartassistant/iqc.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -80,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     'Selamat datang, ${userName ?? 'Pengguna'}',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: screenWidth * 0.05,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -91,22 +90,23 @@ class _DashboardPageState extends State<DashboardPage> {
                 // Widget Dashboard Ikon Navigasi
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  child: Expanded(
                   child: GridView.count(
                     crossAxisCount: 4,
-                    crossAxisSpacing: 10,
+                    crossAxisSpacing: 11.5,
                     mainAxisSpacing: 10,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       _buildDashboardItem(context, 'Penugasan', 'assets/penugasan.png', PenugasanPage()),
-                      _buildDashboardItem(context, 'Comdev', 'assets/comdev.png', ComdevPage()),
-                      _buildDashboardItem(context, 'Disposisi', 'assets/disposisi.png', DisposisiPage()),
+                      _buildDashboardItem(context, 'Ask To Expert', 'assets/comdev.png', ComdevPage()),
                       _buildDashboardItem(context, 'Pengajuan', 'assets/pengajuan.png', PengajuanPage()),
-                      _buildDashboardItem(context, 'Laporan', 'assets/laporan.png', LaporanPage()),
-                      _buildDashboardItem(context, 'Teamwork Management', 'assets/teamwork.png', TeamworkManagementPage()),
-                      _buildDashboardItem(context, 'Project Management', 'assets/project.png', ProjectManagementPage()),
                       _buildDashboardItem(context, 'Konsultasi', 'assets/konsultasi.png', ConsultationPage()),
+                      _buildDashboardItem(context, 'Diskusi Rapat', 'assets/teamwork.png', DiskusiRapatPage()),
+                      _buildDashboardItem(context, 'IQC', 'assets/laporan.png', IQCPage()),
+                      _buildDashboardItem(context, 'Project Management', 'assets/project.png', ProjectManagementPage()),
                     ],
+                  ),
                   ),
                 ),
 
@@ -168,7 +168,7 @@ class AgendaCard extends StatelessWidget {
               'Agenda Bagian III Hari Ini',
               style: TextStyle(
                 color: Colors.cyan,
-                fontSize: screenWidth * 0.045,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -227,7 +227,7 @@ class PetugasCard extends StatelessWidget {
               'Petugas Hari Ini',
               style: TextStyle(
                 color: Colors.cyan,
-                fontSize: screenWidth * 0.045,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -290,7 +290,7 @@ class GudangInternalCard extends StatelessWidget {
               'Utilisasi Kapasitas Gudang Internal Area 3',
               style: TextStyle(
                 color: Colors.cyan,
-                fontSize: screenWidth * 0.045,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -409,7 +409,7 @@ class GudangExternalCard extends StatelessWidget {
               'Utilisasi Kapasitas Gudang External Area 3',
               style: TextStyle(
                 color: Colors.cyan,
-                fontSize: screenWidth * 0.045,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),

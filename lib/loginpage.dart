@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
+      // ignore: unused_local_variable
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: usernameController.text.trim(),
         password: passwordController.text.trim(),
@@ -138,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(75, 185, 236, 100),
+                        backgroundColor: Color.fromRGBO(239, 175, 12, 100),
                         padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.2,
                           vertical: screenHeight * 0.015,

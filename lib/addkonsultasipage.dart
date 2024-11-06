@@ -17,6 +17,7 @@ class _AddConsultationPageState extends State<AddConsultationPage> {
   String _priority = 'Rendah';
   String? _selectedAtasan;
   String? _uploadedFileUrl;
+  // ignore: unused_field
   String? _userRole; // Role user yang sedang login
 
   @override
@@ -111,7 +112,7 @@ Future<List<QueryDocumentSnapshot>> _fetchAtasan() async {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Menutup alert
-                  Navigator.of(context).pushReplacement(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ConsultationPage(),
                     ),

@@ -37,18 +37,26 @@ class _DetailConsultationPageState extends State<DetailConsultationPage> {
   Future<String> getUserName(String userId) async {
     final prefs = await SharedPreferences.getInstance();
     String? cachedName = prefs.getString('userName_$userId');
+
+    // Jika cachedName ada, kembalikan nilai tersebut, jika tidak cek Firestore
     if (cachedName != null) {
       return cachedName;
     }
 
+    // Jika tidak ada di SharedPreferences, cek Firestore
     try {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .get();
+
       if (userDoc.exists && userDoc.data() != null) {
+        // Ambil nama dari dokumen Firestore
         String name = userDoc['name'] ?? 'Nama tidak tersedia';
+
+        // Simpan di SharedPreferences
         prefs.setString('userName_$userId', name);
+
         return name;
       } else {
         return 'Nama tidak tersedia';
@@ -58,6 +66,7 @@ class _DetailConsultationPageState extends State<DetailConsultationPage> {
       return 'Error mengambil nama';
     }
   }
+
 
   Future<String> getCurrentUserId() async {
     User? user = FirebaseAuth.instance.currentUser;

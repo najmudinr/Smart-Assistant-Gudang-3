@@ -5,6 +5,7 @@ import 'package:smartassistant/dashboardpage.dart';
 import 'package:smartassistant/loginpage.dart';
 import 'package:smartassistant/newsevenpage.dart';
 import 'package:smartassistant/productpage.dart';
+import 'package:smartassistant/profil.dart';
 import 'package:smartassistant/reportpage.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     _buildPage(AbsensiPage(), 'Absensi'),
     _buildPage(NewsEventPage(), 'News & Event'),
     _buildPage(ProductPage(), 'Produk'),
-    _buildPage(ReportPage(), 'Report'),
+    _buildPage(ReportAkhirShiftPage(), 'Report'),
   ];
 
   void _onItemTapped(int index) {
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
       );
@@ -46,6 +47,14 @@ class _HomePageState extends State<HomePage> {
       print('Error logging out: $e');
     }
   }
+
+  void _navigateToProfile() {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ProfilePage()),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +71,15 @@ class _HomePageState extends State<HomePage> {
             onSelected: (String result) {
               if (result == 'Logout') {
                 _logout();
+              } else if (result == 'Profile') {
+                _navigateToProfile();
               }
             },
             itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'Profile',
+                child: Text('Profile'),
+              ),
               const PopupMenuItem<String>(
                 value: 'Logout',
                 child: Text('Logout'),
@@ -100,7 +115,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white60,
-        backgroundColor: Color.fromRGBO(75, 185, 236, 100),
+        backgroundColor: Color.fromRGBO(239, 175, 12, 100),
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),

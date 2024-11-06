@@ -160,7 +160,7 @@ class _ConsultationPageState extends State<ConsultationPage> {
                                       alignment: Alignment.bottomRight,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          Navigator.pushReplacement(
+                                          Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => DetailConsultationPage(consultationId: consultation.id),
@@ -193,7 +193,7 @@ class _ConsultationPageState extends State<ConsultationPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddConsultationPage()),
           );

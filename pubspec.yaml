@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.10.0
 
 flutter:
 
@@ -56,3 +57,10 @@ flutter:
         fonts:
           - asset: assets/fonts/Poppins-Bold.ttf
           - asset: assets/fonts/Poppins-Medium.ttf
+
+flutter_icons:
+  android: true
+  iod: true
+  image_path:
+  adaptive_icon_background: "FFFFFF"
+  adaptive_icon_foreground: "assets/playstore.png"
